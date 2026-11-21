@@ -1,22 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
-import addItem from './CartSlice';
-import { configureStore } from '@reduxjs/toolkit';
-import cartReducer from './CartSlice';
-// Create a Redux store using configureStore from Redux Toolkit
-const store = configureStore({
-    // Define the root reducer object
-    reducer: {
-        // 'cart' is the name of the slice in the store, and it's managed by cartReducer
-        cart: cartReducer,
-    },
-});
-
-//export default store; // Export the store for use in the app (e.g., in <Provider store={store}>)
-
-const [addedToCart, setAddedToCart] = useState({});
-
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
@@ -263,21 +247,20 @@ function ProductList({ onHomeClick }) {
         setShowPlants(true); // Set showAboutUs to true when "About Us" link is clicked
         setShowCart(false); // Hide the cart when navigating to About Us
     };
-
-    const handleContinueShopping = (e) => {
-        e.preventDefault();
-        setShowCart(false);
-    };
-    const handleAddToCart = (product) => {
+const [addedToCart, setAddedToCart] = useState({});
+const handleAddToCart = (product) => {
   dispatch(addItem(product)); // Dispatch the action to add the product to the cart (Redux action)
-// const calculateTotalQuantity = () => { return CartItems ? CartItems.reduce((total, item) => total + item.quantity, 0) : 0; };
-        
+
   setAddedToCart((prevState) => ({ // Update the local state to reflect that the product has been added
     ...prevState, // Spread the previous state to retain existing entries
     [product.name]: true, // Set the current product's name as a key with value 'true' to mark it as added
   }));
 };
 
+    const handleContinueShopping = (e) => {
+        e.preventDefault();
+        setShowCart(false);
+    };
     return (
         <div>
             <div className="navbar" style={styleObj}>
@@ -300,6 +283,7 @@ function ProductList({ onHomeClick }) {
             </div>
             {!showCart ? (
                 <div className="product-grid">
+
 {plantsArray.map((category, index) => ( // Loop through each category in plantsArray
   <div key={index}> {/* Unique key for each category div */}
     <h1>
@@ -328,6 +312,7 @@ function ProductList({ onHomeClick }) {
     </div>
   </div>
 ))}
+
 
 
                 </div>
